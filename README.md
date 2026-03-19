@@ -1,5 +1,4 @@
-Tytuł
+Reguły edytorskie
 =======
-
-Rozdział 1
-----------
+Do tytułów używamy znaków = pod linijką
+Do rozdziałów używamy znaków - pod linijką
