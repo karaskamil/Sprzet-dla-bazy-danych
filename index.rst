@@ -33,8 +33,7 @@ Decyzja o wyborze modelu procesora zależy od struktury zapytań generowanych pr
 1. **Taktowanie Zegara:** W środowiskach OLTP, gdzie transakcje często wykonują się sekwencyjnie lub są blokowane przez zamki i zatrzaski, wyższe taktowanie rdzenia (np. 3.6 GHz - 4.0 GHz) przynosi lepsze rezultaty niż ekstremalna liczba rdzeni o niskim taktowaniu. Szybka realizacja pojedynczego wątku skraca czas trwania blokad.
 2. **Skalowanie Wielordzeniowe:** W systemach OLAP silniki baz danych potrafią dzielić jedno zapytanie na wiele wątków. W tym przypadku procesory posiadające 64, 96 lub więcej rdzeni fizycznych (np. AMD EPYC, Intel Xeon Scalable) pozwalają na równoległe skanowanie indeksów i tabel, drastycznie przyspieszając operacje analityczne.
 
-.. note::
-   **Wpływ Licencjonowania na Wybór CPU:** Wiodący producenci oprogramowania bazodanowego (np. Microsoft SQL Server Enterprise, Oracle) stosują model licencjonowania per-core. Koszt licencji na jeden rdzeń wielokrotnie przewyższa koszt zakupu samego sprzętu. Z tego powodu ekonomicznie i wydajnościowo uzasadniony jest wybór procesorów o mniejszej liczbie rdzeni, ale o maksymalnym dostępnym taktowaniu bazowym i zaawansowanej architekturze cache.
+**Wpływ Licencjonowania na Wybór CPU:** Wiodący producenci oprogramowania bazodanowego (np. Microsoft SQL Server Enterprise, Oracle) stosują model licencjonowania per-core. Koszt licencji na jeden rdzeń wielokrotnie przewyższa koszt zakupu samego sprzętu. Z tego powodu ekonomicznie i wydajnościowo uzasadniony jest wybór procesorów o mniejszej liczbie rdzeni, ale o maksymalnym dostępnym taktowaniu bazowym i zaawansowanej architekturze cache.
 
 Topologia NUMA (Non-Uniform Memory Access)
 ------------------------------------------
@@ -71,12 +70,11 @@ Wymóg Technologii ECC (Error-Correcting Code)
 
 W serwerach bazodanowych niedopuszczalne jest stosowanie pamięci bez obsługi korekcji błędów (non-ECC). Pamięci **ECC** posiadają dodatkowe układy scalone pozwalające na wykrywanie i automatyczną korekcję błędów jednobitowych oraz wykrywanie błędów wielobitowych.
 
-.. warning::
-   Wystąpienie zjawiska *bit-flip* (samorzutnej zmiany wartości bitu w pamięci RAM pod wpływem np. tła radiacyjnego lub zakłóceń elektromagnetycznych) w systemie bez ECC niesie katastrofalne skutki dla baz danych:
+Wystąpienie zjawiska *bit-flip* (samorzutnej zmiany wartości bitu w pamięci RAM pod wpływem np. tła radiacyjnego lub zakłóceń elektromagnetycznych) w systemie bez ECC niesie katastrofalne skutki dla baz danych:
    
-   * **Cicha korupcja danych:** Błędna wartość może zostać zapisana z bufora pamięci wprost na dysk, powodując trwałe i niezauważalne zniszczenie struktury tabeli lub błędne zapisy księgowe.
-   * **Uszkodzenie stron indeksowych:** Powoduje błędy integralności i uniemożliwia poprawne wykonywanie zapytań SQL.
-   * **Awaria krytyczna:** W przypadku naruszenia pamięci jądra systemu operacyjnego lub krytycznego procesu bazy danych dochodzi do natychmiastowego zatrzymania serwera (Kernel Panic / BSOD).
+* **Cicha korupcja danych:** Błędna wartość może zostać zapisana z bufora pamięci wprost na dysk, powodując trwałe i niezauważalne zniszczenie struktury tabeli lub błędne zapisy księgowe.
+* **Uszkodzenie stron indeksowych:** Powoduje błędy integralności i uniemożliwia poprawne wykonywanie zapytań SQL.
+* **Awaria krytyczna:** W przypadku naruszenia pamięci jądra systemu operacyjnego lub krytycznego procesu bazy danych dochodzi do natychmiastowego zatrzymania serwera (Kernel Panic / BSOD).
 
 Parametry Wydajnościowe: Przepustowość i Opóźnienia
 ---------------------------------------------------
@@ -126,9 +124,8 @@ W przypadku nowoczesnych pamięci NVMe sprzętowe kontrolery starszego typu staw
 * **Bezpośredniego podłączenia NVMe (Direct Attached PCIe)** i zarządzania programowego na poziomie zaawansowanych systemów plików (np. ZFS) lub warstw logicznych OS (np. Linux mdadm / LVM).
 * Modernistycznych, dedykowanych sprzętowych kontrolerów NVMe RAID klasy Enterprise, zdolnych do natywnego przetwarzania protokołu NVMe z pełną prędkością magistrali PCIe Gen5.
 
-.. important::
-   **Pamięć Podtrzymywana Bateryjnie (BBU/FBWC):**
-   W przypadku korzystania ze sprzętowego kontrolera RAID z włączoną pamięcią podręczną zapisu (*Write-Back Cache*), **bezwzględnym warunkiem bezpieczeństwa** jest obecność modułu **BBU** (*Battery Backup Unit*) lub **FBWC** (*Flash-Backed Write Cache*). W razie awarii zasilania serwera, moduł ten podtrzymuje dane w pamięci cache kontrolera (lub przepisuje je do dedykowanej pamięci flash), zapobiegając utracie nieutrwalonych transakcji i uszkodzeniu struktury macierzy.
+**Pamięć Podtrzymywana Bateryjnie (BBU/FBWC):**
+W przypadku korzystania ze sprzętowego kontrolera RAID z włączoną pamięcią podręczną zapisu (*Write-Back Cache*), **bezwzględnym warunkiem bezpieczeństwa** jest obecność modułu **BBU** (*Battery Backup Unit*) lub **FBWC** (*Flash-Backed Write Cache*). W razie awarii zasilania serwera, moduł ten podtrzymuje dane w pamięci cache kontrolera (lub przepisuje je do dedykowanej pamięci flash), zapobiegając utracie nieutrwalonych transakcji i uszkodzeniu struktury macierzy.
 
 Wybór Poziomu RAID pod Kątem Baz Danych
 ---------------------------------------
